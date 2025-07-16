@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Ardalis.SharedKernel"/>
+        <PackageReference Include="ErrorOr"/>
+        <PackageReference Include="Telegram.Bot"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\A3TelegramBot.Domain\A3TelegramBot.Domain.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Services\UserStateHandlers\CallBackRequestState\CallBackRequestStateHandlers\" />
+    </ItemGroup>
+
+</Project>
