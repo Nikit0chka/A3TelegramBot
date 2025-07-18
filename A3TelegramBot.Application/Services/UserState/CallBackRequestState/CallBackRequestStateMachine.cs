@@ -7,8 +7,9 @@ using A3TelegramBot.Application.UseCases.RequestCallBack.GetState;
 using A3TelegramBot.Application.UseCases.RequestCallBack.HandleName;
 using A3TelegramBot.Application.UseCases.RequestCallBack.HandlePhone;
 using A3TelegramBot.Application.UseCases.RequestCallBack.Start;
+using A3TelegramBot.Application.UseCases.UserSessions.ChangeUserSessionState;
+using A3TelegramBot.Domain.AggregateModels.UserSessionAggregate;
 using A3TelegramBot.Domain.AggregateModels.UserSessionAggregate.CallBackRequestEntity;
-using A3TelegramBot.Domain.AggregateModels.UserSessionAggregate.UserSession;
 using MediatR;
 
 namespace A3TelegramBot.Application.Services.UserState.CallBackRequestState;
@@ -23,7 +24,7 @@ internal sealed class CallBackRequestStateMachine(
     IUserSessionStateMachine userSessionStateMachine,
     IMediator mediator,
     IEnumerable<ICallbackStateHandler> stateHandlers,
-    IEnumerable<ICallbackCommandStrategy> commandStrategies):BaseStateHandler(telegramResponseService, mediator, userSessionStateMachine)
+    IEnumerable<ICallbackCommandStrategy> commandStrategies) : BaseStateHandler(telegramResponseService)
 {
     private readonly static HashSet<TelegramBotCommand> IdleStateCommands =
     [
@@ -32,12 +33,10 @@ internal sealed class CallBackRequestStateMachine(
         TelegramBotCommands.FindNearestReceptions
     ];
 
-    private readonly List<ICallbackCommandStrategy> _commandStrategies = commandStrategies.ToList();
+    private readonly List<ICallbackCommandStrategy> _commandStrategies = [.. commandStrategies];
 
-    private readonly CallBackRequestStateContext _context = new(
-                                                                telegramResponseService,
-                                                                mediator,
-                                                                userSessionStateMachine);
+    private readonly CallBackRequestStateContext _context = new(telegramResponseService,
+                                                                mediator);
 
     private readonly Dictionary<CallBackRequestStatus, ICallbackStateHandler> _stateHandlers = stateHandlers.ToDictionary(static callbackStateHandler => callbackStateHandler.Status);
 
@@ -69,11 +68,12 @@ internal sealed class CallBackRequestStateMachine(
         // Обработка команд для перехода в Idle состояние
         if (IdleStateCommands.Contains(command))
         {
-            await _context.UserSessionStateMachine.TransitionToStateAsync(
-                                                                          chatId,
-                                                                          UserSessionState.Idle,
-                                                                          command,
-                                                                          cancellationToken);
+            await userSessionStateMachine.TransitionToStateAsync(
+                                                                        chatId,
+                                                                        UserSessionState.Idle,
+                                                                        command,
+                                                                        cancellationToken);
+
 
             return;
         }

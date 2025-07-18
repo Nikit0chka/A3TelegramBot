@@ -1,5 +1,4 @@
-﻿using A3TelegramBot.Application.Abstractions;
-using A3TelegramBot.Application.Contracts;
+﻿using A3TelegramBot.Application.Contracts;
 using MediatR;
 
 namespace A3TelegramBot.Application.Services.UserState.CallBackRequestState.CommandStrategies;
@@ -10,10 +9,8 @@ namespace A3TelegramBot.Application.Services.UserState.CallBackRequestState.Comm
 /// </summary>
 internal sealed class CallBackRequestStateContext(
     ITelegramResponseService telegramResponseService,
-    IMediator mediator,
-    IUserSessionStateMachine userSessionStateMachine)
+    IMediator mediator)
 {
     public ITelegramResponseService TelegramResponseService { get; } = telegramResponseService;
     public IMediator Mediator { get; } = mediator;
-    public IUserSessionStateMachine UserSessionStateMachine { get; } = userSessionStateMachine;
 }

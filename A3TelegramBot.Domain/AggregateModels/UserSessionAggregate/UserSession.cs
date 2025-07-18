@@ -1,8 +1,8 @@
 ﻿using A3TelegramBot.Domain.AggregateModels.UserSessionAggregate.CallBackRequestEntity;
-using A3TelegramBot.Domain.AggregateModels.UserSessionAggregate.UserSession.Events;
+using A3TelegramBot.Domain.AggregateModels.UserSessionAggregate.Events;
 using Ardalis.SharedKernel;
 
-namespace A3TelegramBot.Domain.AggregateModels.UserSessionAggregate.UserSession;
+namespace A3TelegramBot.Domain.AggregateModels.UserSessionAggregate;
 
 /// <inheritdoc cref="IAggregateRoot" />
 /// <summary>
@@ -100,6 +100,7 @@ public sealed class UserSession:EntityBase, IAggregateRoot
     {
         CurrentState = UserSessionState.Idle;
         LastActivity = DateTime.UtcNow;
+        CallBackRequest = null;
         RegisterDomainEvent(new CallBackRequestCompletedEvent(Id));
     }
 

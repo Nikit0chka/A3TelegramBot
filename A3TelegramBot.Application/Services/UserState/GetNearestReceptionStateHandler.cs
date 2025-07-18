@@ -4,7 +4,7 @@ using A3TelegramBot.Application.Contracts;
 using A3TelegramBot.Application.Extensions;
 using A3TelegramBot.Application.UseCases.GetNearestReceptions.GetNearestReceptions;
 using A3TelegramBot.Application.UseCases.GetNearestReceptions.Start;
-using A3TelegramBot.Domain.AggregateModels.UserSessionAggregate.UserSession;
+using A3TelegramBot.Domain.AggregateModels.UserSessionAggregate;
 using MediatR;
 
 namespace A3TelegramBot.Application.Services.UserState;
@@ -15,21 +15,21 @@ namespace A3TelegramBot.Application.Services.UserState;
 /// </summary>
 internal sealed class GetNearestReceptionStateHandler(
     ITelegramResponseService telegramResponseService,
-    IMediator mediator,
-    IUserSessionStateMachine userSessionStateMachine)
-    :BaseStateHandler(telegramResponseService, mediator, userSessionStateMachine)
+    IUserSessionStateMachine userSessionStateMachine,
+    IMediator mediator)
+    : BaseStateHandler(telegramResponseService)
 {
 
     public override async Task EnterStateAsync(long chatId, CancellationToken cancellationToken)
     {
-        var startResult = await Mediator.SendMediatorRequest(
+        var startResult = await mediator.SendMediatorRequest(
                                                              new StartGetNearestReceptionsCommand(chatId),
                                                              chatId,
-                                                             TelegramResponseService,
+                                                             telegramResponseService,
                                                              cancellationToken);
 
         if (!startResult.IsError)
-            await TelegramResponseService.SendRequestLocationAsync(chatId, cancellationToken);
+            await telegramResponseService.SendRequestLocationAsync(chatId, cancellationToken);
     }
 
     public override async Task HandleTextCommandAsync(long chatId, TelegramBotCommand? command, CancellationToken cancellationToken)
@@ -43,11 +43,11 @@ internal sealed class GetNearestReceptionStateHandler(
         switch (command)
         {
             case var _ when command == TelegramBotCommands.RequestCallback:
-                await UserSessionStateMachine.TransitionToStateAsync(chatId, UserSessionState.InCallbackRequest, null, cancellationToken);
+                await userSessionStateMachine.TransitionToStateAsync(chatId, UserSessionState.InCallbackRequest, command, cancellationToken);
                 break;
             case var _ when command == TelegramBotCommands.CheckPrice:
             case var _ when command == TelegramBotCommands.Services:
-                await UserSessionStateMachine.TransitionToStateAsync(chatId, UserSessionState.Idle, command, cancellationToken);
+                await userSessionStateMachine.TransitionToStateAsync(chatId, UserSessionState.Idle, command, cancellationToken);
                 break;
             case var _ when command == TelegramBotCommands.FindNearestReceptions:
                 await EnterStateAsync(chatId, cancellationToken);
@@ -56,26 +56,26 @@ internal sealed class GetNearestReceptionStateHandler(
                 await HandleCancelCommandAsync(chatId, cancellationToken);
                 break;
             default:
-                await TelegramResponseService.SendCommandNotFoundAsync(chatId, null, cancellationToken);
+                await telegramResponseService.SendCommandNotFoundAsync(chatId, null, cancellationToken);
                 break;
         }
     }
 
     public override async Task HandleLocationAsync(long chatId, double latitude, double longitude, CancellationToken cancellationToken)
     {
-        var result = await Mediator.SendMediatorRequest(
+        var result = await mediator.SendMediatorRequest(
                                                         new GetNearestReceptionsCommand(chatId, latitude, longitude),
                                                         chatId,
-                                                        TelegramResponseService,
+                                                        telegramResponseService,
                                                         cancellationToken);
 
         if (!result.IsError)
-            await TelegramResponseService.SendReceptionsList(chatId, result.Value, cancellationToken);
+            await telegramResponseService.SendReceptionsList(chatId, result.Value, cancellationToken);
     }
 
     private async Task HandleCancelCommandAsync(long chatId, CancellationToken cancellationToken)
     {
-        await UserSessionStateMachine.TransitionToStateAsync(chatId, UserSessionState.Idle, null, cancellationToken);
-        await TelegramResponseService.SendFindNearestReceptionsCancelledAsync(chatId, cancellationToken);
+        await userSessionStateMachine.TransitionToStateAsync(chatId, UserSessionState.Idle, null, cancellationToken);
+        await telegramResponseService.SendFindNearestReceptionsCancelledAsync(chatId, cancellationToken);
     }
 }

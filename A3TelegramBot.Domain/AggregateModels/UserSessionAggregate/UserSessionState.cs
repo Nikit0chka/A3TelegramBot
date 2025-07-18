@@ -1,4 +1,4 @@
-namespace A3TelegramBot.Domain.AggregateModels.UserSessionAggregate.UserSession;
+namespace A3TelegramBot.Domain.AggregateModels.UserSessionAggregate;
 
 /// <summary>
 ///     Состояние сессии пользователя

@@ -26,7 +26,7 @@ public sealed class CallBackRequest
     public CallBackRequest(int userSessionId)
     {
         CurrentState = CallBackRequestStatus.AwaitingPhone;
-        Name = string.Empty;
+        UserName = string.Empty;
 
         Guard.Against.Negative(userSessionId,
                                nameof(userSessionId),
@@ -58,7 +58,7 @@ public sealed class CallBackRequest
     /// <summary>
     ///     Имя пользователя
     /// </summary>
-    public string? Name { get; private set; }
+    public string? UserName { get; private set; }
 
     /// <summary>
     ///     ID связанной пользовательской сессии
@@ -112,7 +112,7 @@ public sealed class CallBackRequest
                                                  nameof(name),
                                                  CallBackRequestValidationMessages.NameIsOutOfRange);
 
-            Name = trimName;
+            UserName = trimName;
             CurrentState = CallBackRequestStatus.AwaitingPersonalDataProcessingPolicyAgreement;
 
             return Result.Success;

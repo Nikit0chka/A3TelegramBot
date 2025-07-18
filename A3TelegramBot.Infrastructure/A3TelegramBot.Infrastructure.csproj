@@ -7,20 +7,20 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="ErrorOr"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer"/>
-        <PackageReference Include="Refit"/>
-        <PackageReference Include="Refit.HttpClientFactory"/>
+        <PackageReference Include="ErrorOr" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
+        <PackageReference Include="Refit" />
+        <PackageReference Include="Refit.HttpClientFactory" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\A3TelegramBot.Application\A3TelegramBot.Application.csproj"/>
-        <ProjectReference Include="..\A3TelegramBot.Domain\A3TelegramBot.Domain.csproj"/>
+        <ProjectReference Include="..\A3TelegramBot.Application\A3TelegramBot.Application.csproj" />
+        <ProjectReference Include="..\A3TelegramBot.Domain\A3TelegramBot.Domain.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <None Remove="Config\appsettings.infrastructure.json"/>
+        <None Remove="Config\appsettings.infrastructure.json" />
         <Content Include="Config\appsettings.infrastructure.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>

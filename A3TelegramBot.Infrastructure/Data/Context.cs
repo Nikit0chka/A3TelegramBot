@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
+using A3TelegramBot.Domain.AggregateModels.UserSessionAggregate;
 using A3TelegramBot.Domain.AggregateModels.UserSessionAggregate.CallBackRequestEntity;
-using A3TelegramBot.Domain.AggregateModels.UserSessionAggregate.UserSession;
 using A3TelegramBot.Domain.AggregateModels.UserSessionStatisticAggregates;
 using Ardalis.SharedKernel;
 using Microsoft.EntityFrameworkCore;

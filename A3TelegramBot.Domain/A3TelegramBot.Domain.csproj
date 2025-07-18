@@ -7,10 +7,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Ardalis.GuardClauses"/>
-        <PackageReference Include="Ardalis.SharedKernel"/>
-        <PackageReference Include="Ardalis.Specification.EntityFrameworkCore"/>
-        <PackageReference Include="ErrorOr"/>
+        <PackageReference Include="Ardalis.GuardClauses" />
+        <PackageReference Include="Ardalis.SharedKernel" />
+        <PackageReference Include="Ardalis.Specification.EntityFrameworkCore" />
+        <PackageReference Include="ErrorOr" />
     </ItemGroup>
 
 </Project>

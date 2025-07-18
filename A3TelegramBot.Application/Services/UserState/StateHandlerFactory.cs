@@ -1,6 +1,6 @@
 ﻿using A3TelegramBot.Application.Abstractions;
 using A3TelegramBot.Application.Services.UserState.CallBackRequestState;
-using A3TelegramBot.Domain.AggregateModels.UserSessionAggregate.UserSession;
+using A3TelegramBot.Domain.AggregateModels.UserSessionAggregate;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace A3TelegramBot.Application.Services.UserState;

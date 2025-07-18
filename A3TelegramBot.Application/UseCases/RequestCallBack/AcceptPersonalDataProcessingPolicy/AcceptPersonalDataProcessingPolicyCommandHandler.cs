@@ -1,5 +1,6 @@
-﻿using A3TelegramBot.Domain.AggregateModels.UserSessionAggregate.UserSession;
-using A3TelegramBot.Domain.AggregateModels.UserSessionAggregate.UserSession.Specifications;
+﻿using A3TelegramBot.Application.Contracts;
+using A3TelegramBot.Domain.AggregateModels.UserSessionAggregate;
+using A3TelegramBot.Domain.AggregateModels.UserSessionAggregate.Specifications;
 using Ardalis.SharedKernel;
 using ErrorOr;
 using Microsoft.Extensions.Logging;
@@ -12,14 +13,18 @@ namespace A3TelegramBot.Application.UseCases.RequestCallBack.AcceptPersonalDataP
 /// </summary>
 internal sealed class AcceptPersonalDataProcessingPolicyCommandHandler(
     IRepository<UserSession> userSessionRepository,
+    ISdaiLomRfApiService sdaiLomRfApiService,
     ILogger<AcceptPersonalDataProcessingPolicyCommandHandler> logger)
-    :ICommandHandler<AcceptPersonalDataProcessingPolicyCommand, ErrorOr<AcceptPersonalDataProcessingPolicyCommandResult>>
+    : ICommandHandler<AcceptPersonalDataProcessingPolicyCommand, ErrorOr<AcceptPersonalDataProcessingPolicyCommandResult>>
 {
     public async Task<ErrorOr<AcceptPersonalDataProcessingPolicyCommandResult>> Handle(AcceptPersonalDataProcessingPolicyCommand request, CancellationToken cancellationToken)
     {
         logger.LogInformation("Обработка команды {Command} ChatId: {ChatId}", nameof(AcceptPersonalDataProcessingPolicyCommand), request.ChatId);
 
         var userSession = await userSessionRepository.SingleOrDefaultAsync(new UserSessionByChatIdSpecificationWithCallBackRequest(request.ChatId), cancellationToken);
+
+        var callBackRequestUserName = userSession.CallBackRequest.UserName;
+        var callBackRequestPhone = userSession.CallBackRequest.Phone.Value.Value;
 
         if (userSession is null)
         {
@@ -41,15 +46,25 @@ internal sealed class AcceptPersonalDataProcessingPolicyCommandHandler(
         }
 
         userSession.CallBackRequest.AcceptPersonalDataProcessingPolicy();
+
+        var requestResult = await sdaiLomRfApiService.SendCallBackRequestCreated(userSession.CallBackRequest.Id, userSession.CallBackRequest.UserName!, userSession.CallBackRequest.Phone!.Value.Value, cancellationToken);
+
+        if (requestResult.IsError)
+        {
+            logger.LogWarning("Ошибка Api запроса отправки создания заявки на обратный звонок, Error: {Error}", requestResult.FirstError);
+            return requestResult.FirstError;
+        }
+
         userSession.CompleteCallbackProcess();
 
+        //TODO: после отправки заявки на обратный звонок она сохраняется не сразу. 
+        //возможно стоит отправлять заявки в фоне
         await userSessionRepository.UpdateAsync(userSession, cancellationToken);
 
-        logger.LogInformation("Завершена обработка команды {Command}, политика обработки персональных данных принята, UserSessionId: {UserSessionId}, CallBackRequestId: {CallBackRequestId}",
+        logger.LogInformation("Завершена обработка команды {Command}, политика обработки персональных данных принята, UserSessionId: {UserSessionId}",
                               nameof(AcceptPersonalDataProcessingPolicyCommand),
-                              userSession.Id,
-                              userSession.CallBackRequest.Id);
+                              userSession.Id);
 
-        return new AcceptPersonalDataProcessingPolicyCommandResult(userSession.CallBackRequest.Name!, userSession.CallBackRequest.Phone!.Value.Value);
+        return new AcceptPersonalDataProcessingPolicyCommandResult(callBackRequestUserName, callBackRequestPhone);
     }
 }

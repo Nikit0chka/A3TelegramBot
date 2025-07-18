@@ -1,9 +1,10 @@
 ﻿using A3TelegramBot.Application.Abstractions;
 using A3TelegramBot.Application.Commands;
 using A3TelegramBot.Application.Contracts;
+using A3TelegramBot.Application.UseCases.UserSessions.ChangeUserSessionState;
 using A3TelegramBot.Application.UseCases.UserSessionStatistic.PriceCheckRequest;
 using A3TelegramBot.Application.UseCases.UserSessionStatistic.ServicesCheckRequest;
-using A3TelegramBot.Domain.AggregateModels.UserSessionAggregate.UserSession;
+using A3TelegramBot.Domain.AggregateModels.UserSessionAggregate;
 using MediatR;
 
 namespace A3TelegramBot.Application.Services.UserState;
@@ -13,26 +14,26 @@ namespace A3TelegramBot.Application.Services.UserState;
 ///     Обработчик состояния "простоя"
 /// </summary>
 internal sealed class IdleStateHandler(
-    ITelegramResponseService telegramResponseService,
+    IUserSessionStateMachine userSessionStateMachine,
     IMediator mediator,
-    IUserSessionStateMachine userSessionStateMachine)
-    :BaseStateHandler(telegramResponseService, mediator, userSessionStateMachine)
+    ITelegramResponseService telegramResponseService)
+        : BaseStateHandler(telegramResponseService)
 {
     public override async Task HandleTextCommandAsync(long chatId, TelegramBotCommand? command, CancellationToken cancellationToken)
     {
         if (command == null)
         {
-            await TelegramResponseService.SendCommandNotFoundAsync(chatId, null, cancellationToken);
+            await telegramResponseService.SendCommandNotFoundAsync(chatId, null, cancellationToken);
             return;
         }
 
         switch (command)
         {
             case var _ when command == TelegramBotCommands.FindNearestReceptions:
-                await UserSessionStateMachine.TransitionToStateAsync(chatId, UserSessionState.InFindingNearestReceptions, null, cancellationToken);
+                await userSessionStateMachine.TransitionToStateAsync(chatId, UserSessionState.InFindingNearestReceptions, null, cancellationToken);
                 break;
             case var _ when command == TelegramBotCommands.RequestCallback:
-                await UserSessionStateMachine.TransitionToStateAsync(chatId, UserSessionState.InCallbackRequest, null, cancellationToken);
+                await userSessionStateMachine.TransitionToStateAsync(chatId, UserSessionState.InCallbackRequest, null, cancellationToken);
                 break;
             case var _ when command == TelegramBotCommands.CheckPrice:
                 await HandlePriceCheckRequest(chatId, cancellationToken);
@@ -41,20 +42,20 @@ internal sealed class IdleStateHandler(
                 await HandleServicesCheckRequest(chatId, cancellationToken);
                 break;
             default:
-                await TelegramResponseService.SendCommandNotFoundAsync(chatId, null, cancellationToken);
+                await telegramResponseService.SendCommandNotFoundAsync(chatId, null, cancellationToken);
                 break;
         }
     }
 
     private async Task HandlePriceCheckRequest(long chatId, CancellationToken cancellationToken)
     {
-        await Mediator.Send(new PriceCheckRequestCommand(chatId), cancellationToken);
-        await TelegramResponseService.SendPriceAsync(chatId, cancellationToken);
+        await mediator.Send(new PriceCheckRequestCommand(chatId), cancellationToken);
+        await telegramResponseService.SendPriceAsync(chatId, cancellationToken);
     }
 
     private async Task HandleServicesCheckRequest(long chatId, CancellationToken cancellationToken)
     {
-        await Mediator.Send(new ServicesCheckRequestCommand(chatId), cancellationToken);
-        await TelegramResponseService.SendServicesAsync(chatId, cancellationToken);
+        await mediator.Send(new ServicesCheckRequestCommand(chatId), cancellationToken);
+        await telegramResponseService.SendServicesAsync(chatId, cancellationToken);
     }
 }

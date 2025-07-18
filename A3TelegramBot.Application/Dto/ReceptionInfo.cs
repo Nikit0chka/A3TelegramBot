@@ -5,6 +5,7 @@
 /// </summary>
 /// <param name="Name"> Наименование </param>
 /// <param name="Address"> Адрес </param>
-/// <param name="Phone"> Номер телефона </param>
-/// <param name="WorkGraphic"> Рабочий график </param>
-public sealed record ReceptionInfo(string Name, string Address, string Phone, string WorkGraphic);
+/// <param name="Schedule"> Рабочий график </param>
+/// <param name="WorkTime"> Рабочее время дня </param>
+/// <param name="Phone"> Номера телефонов </param>
+public sealed record ReceptionInfo(string Address, string Schedule, string WorkTime, IReadOnlyCollection<string> Phone);

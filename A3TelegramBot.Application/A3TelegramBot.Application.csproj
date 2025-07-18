@@ -7,22 +7,22 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Ardalis.SharedKernel"/>
-        <PackageReference Include="ErrorOr"/>
-        <PackageReference Include="Telegram.Bot"/>
+        <PackageReference Include="Ardalis.SharedKernel" />
+        <PackageReference Include="ErrorOr" />
+        <PackageReference Include="Telegram.Bot" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\A3TelegramBot.Domain\A3TelegramBot.Domain.csproj"/>
+        <ProjectReference Include="..\A3TelegramBot.Domain\A3TelegramBot.Domain.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <Compile Remove="Services\StateHandlerFactory.cs"/>
+        <Compile Remove="Services\StateHandlerFactory.cs" />
     </ItemGroup>
 
     <ItemGroup>
-        <Compile Remove="Services\UserStateHandlers\IdleStateHandler.cs"/>
-        <Compile Remove="Services\UserSessionStateMachine.cs"/>
+        <Compile Remove="Services\UserStateHandlers\IdleStateHandler.cs" />
+        <Compile Remove="Services\UserSessionStateMachine.cs" />
     </ItemGroup>
 
 </Project>

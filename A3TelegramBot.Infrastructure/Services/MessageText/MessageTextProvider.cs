@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 
 namespace A3TelegramBot.Infrastructure.Services.MessageText;
 
-internal sealed class MessageTextProvider(IOptions<MessageTextOptions> messageTextOptions):IMessageTextProvider
+internal sealed class MessageTextProvider(IOptions<MessageTextOptions> messageTextOptions) : IMessageTextProvider
 {
     private const string CommandNotFoundBase = "Команда не опознана";
     private const string CommandNotFoundWithParam = "Команда {0} не опознана";
@@ -57,17 +57,16 @@ internal sealed class MessageTextProvider(IOptions<MessageTextOptions> messageTe
 
         foreach (var receptionInfo in receptionInfos)
         {
-            sb.AppendLine($"{receptionInfo.Name}")
-                .AppendLine($"📍 {receptionInfo.Address}")
-                .AppendLine($"📞 {receptionInfo.Phone}")
-                .AppendLine($"⏰ {receptionInfo.WorkGraphic}\n");
+            sb.AppendLine($"📍 {receptionInfo.Address}")
+                .AppendLine($"📞 {string.Join("\n      ", receptionInfo.Phone)}")
+                .AppendLine($"⏰ График работы: {receptionInfo.Schedule}")
+                .AppendLine($"      {receptionInfo.WorkTime}\n");
         }
 
         return sb.ToString();
     }
 
     public string GetFindNearestReceptionsCancelledText() => $"Для поиска ближайших приемных пунктов перейдите по ссылке: {messageTextOptions.Value.ReceptionsLink}.";
-
     public string GetRequestPersonalDataProcessingPolicyText() => $"Вы согласны с политикой обработки персональных данных? {messageTextOptions.Value.PersonalDataPolicyLink}";
     public string GetUnhandledExceptionOccuredText() => "Произошла непредвиденная ошибка, при обработке запроса. Пожалуйста, попробуйте позже";
 }

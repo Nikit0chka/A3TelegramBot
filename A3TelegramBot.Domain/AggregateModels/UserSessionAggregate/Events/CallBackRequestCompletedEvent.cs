@@ -1,6 +1,6 @@
 ﻿using Ardalis.SharedKernel;
 
-namespace A3TelegramBot.Domain.AggregateModels.UserSessionAggregate.UserSession.Events;
+namespace A3TelegramBot.Domain.AggregateModels.UserSessionAggregate.Events;
 
 /// <inheritdoc />
 /// <summary>

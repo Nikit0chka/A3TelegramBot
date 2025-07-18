@@ -1,8 +1,8 @@
 using Ardalis.Specification;
 
-namespace A3TelegramBot.Domain.AggregateModels.UserSessionAggregate.UserSession.Specifications;
+namespace A3TelegramBot.Domain.AggregateModels.UserSessionAggregate.Specifications;
 
-/// <inheritdoc cref="Ardalis.Specification.Specification{T}" />
+/// <inheritdoc cref="Specification{T}" />
 /// <summary>
 ///     Спецификация поиска сессии пользователя по Id телеграм чата
 /// </summary>

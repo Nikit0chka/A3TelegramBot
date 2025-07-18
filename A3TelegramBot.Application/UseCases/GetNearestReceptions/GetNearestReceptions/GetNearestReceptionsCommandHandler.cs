@@ -1,10 +1,10 @@
 ﻿using A3TelegramBot.Application.Contracts;
 using A3TelegramBot.Application.Dto;
-using A3TelegramBot.Domain.AggregateModels.UserSessionAggregate.UserSession;
-using A3TelegramBot.Domain.AggregateModels.UserSessionAggregate.UserSession.Specifications;
 using Ardalis.SharedKernel;
 using ErrorOr;
 using Microsoft.Extensions.Logging;
+using A3TelegramBot.Domain.AggregateModels.UserSessionAggregate;
+using A3TelegramBot.Domain.AggregateModels.UserSessionAggregate.Specifications;
 
 namespace A3TelegramBot.Application.UseCases.GetNearestReceptions.GetNearestReceptions;
 
@@ -46,7 +46,7 @@ internal sealed class GetNearestReceptionsCommandHandler(
 
             if (getReceptionsResult.IsError)
             {
-                logger.LogWarning("Ошибка Api запроса: {error}", getReceptionsResult.FirstError);
+                logger.LogWarning("Ошибка Api запроса получения приемных пунктов: {error}", getReceptionsResult.FirstError);
                 return getReceptionsResult;
             }
 
@@ -60,8 +60,8 @@ internal sealed class GetNearestReceptionsCommandHandler(
         }
         catch (Exception e)
         {
-
-            return Error.Failure("Произошла непредвиденная ошибка, попробуйте позже");
+            logger.LogError(e, "Ошибка при обработке команды {Command} ChatId: {ChatId}", nameof(GetNearestReceptionsCommand), request.ChatId);
+            return Error.Failure(description: "Произошла непредвиденная ошибка, попробуйте позже");
         }
     }
 }

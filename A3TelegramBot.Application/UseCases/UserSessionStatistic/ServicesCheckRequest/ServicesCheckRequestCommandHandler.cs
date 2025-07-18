@@ -1,5 +1,5 @@
-using A3TelegramBot.Domain.AggregateModels.UserSessionAggregate.UserSession;
-using A3TelegramBot.Domain.AggregateModels.UserSessionAggregate.UserSession.Specifications;
+using A3TelegramBot.Domain.AggregateModels.UserSessionAggregate;
+using A3TelegramBot.Domain.AggregateModels.UserSessionAggregate.Specifications;
 using A3TelegramBot.Domain.AggregateModels.UserSessionStatisticAggregates;
 using Ardalis.SharedKernel;
 using MediatR;

@@ -1,5 +1,5 @@
-using A3TelegramBot.Domain.AggregateModels.UserSessionAggregate.UserSession;
-using A3TelegramBot.Domain.AggregateModels.UserSessionAggregate.UserSession.Specifications;
+using A3TelegramBot.Domain.AggregateModels.UserSessionAggregate;
+using A3TelegramBot.Domain.AggregateModels.UserSessionAggregate.Specifications;
 using Ardalis.SharedKernel;
 using ErrorOr;
 using Microsoft.Extensions.Logging;
@@ -32,7 +32,6 @@ internal sealed class CancelGetNearestReceptionsCommandHandler(IRepository<UserS
 
         if (userSession.CurrentState != UserSessionState.InFindingNearestReceptions)
         {
-            //TODO:Возможно нужно выкидывать ошибку и обернуть все в try, чтобы пользователь не получал это сообщение
             logger.LogWarning("Состояние сессии не валидно, SessionId: {SessionId}", userSession.Id);
             return Error.Conflict(description: "Состояние сессии не валидно");
         }

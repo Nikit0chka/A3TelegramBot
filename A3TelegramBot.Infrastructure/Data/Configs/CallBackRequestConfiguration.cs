@@ -23,6 +23,6 @@ public class CallBackRequestConfiguration:IEntityTypeConfiguration<CallBackReque
                                    : PhoneNumber.Create(phoneString).Value)
             .HasMaxLength(PhoneNumberConstants.PhoneNumberMaxLength).IsRequired(false);
 
-        builder.Property(static callbackRequest => callbackRequest.Name).HasMaxLength(CallBackRequestConstants.NameMaxLength);
+        builder.Property(static callbackRequest => callbackRequest.UserName).HasMaxLength(CallBackRequestConstants.NameMaxLength);
     }
 }

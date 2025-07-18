@@ -1,14 +1,12 @@
 ﻿using A3TelegramBot.Application.Abstractions;
 using A3TelegramBot.Application.Commands;
 using A3TelegramBot.Application.Contracts;
-using MediatR;
 
 namespace A3TelegramBot.Application.Services;
 
 internal sealed class TelegramProcessor(
     ITelegramResponseService responseService,
-    IUserSessionStateMachine userSessionStateMachine,
-    IMediator mediator)
+    IUserSessionStateMachine userSessionStateMachine)
     :ITelegramProcessor
 {
     public Task ProcessCommandAsync(long chatId, string command, CancellationToken cancellationToken) => !TelegramBotCommands.TryGetCommand(command, out var botCommand)? Task.CompletedTask : HandleBotCommandAsync(chatId, botCommand, cancellationToken);
