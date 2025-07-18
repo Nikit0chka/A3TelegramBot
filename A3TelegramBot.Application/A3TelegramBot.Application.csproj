@@ -17,12 +17,12 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Remove="Services\StateHandlerFactory.cs" />
+        <Compile Remove="Services\StateHandlerFactory.cs"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Remove="Services\UserStateHandlers\IdleStateHandler.cs" />
-      <Compile Remove="Services\UserSessionStateMachine.cs" />
+        <Compile Remove="Services\UserStateHandlers\IdleStateHandler.cs"/>
+        <Compile Remove="Services\UserSessionStateMachine.cs"/>
     </ItemGroup>
 
 </Project>

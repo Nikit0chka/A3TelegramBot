@@ -11,10 +11,9 @@ public sealed class CallBackRequestCompletedRecord:BaseStatisticRecord, IAggrega
 {
     /// <inheritdoc />
     /// <summary>
-    /// Конструктор для EF Core
+    ///     Конструктор для EF Core
     /// </summary>
-    private CallBackRequestCompletedRecord():base() { }
+    private CallBackRequestCompletedRecord() { }
 
     public CallBackRequestCompletedRecord(int userId):base(userId) { }
-
 }

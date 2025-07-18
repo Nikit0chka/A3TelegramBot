@@ -7,9 +7,9 @@ namespace A3TelegramBot.Presentation.Endpoints.Statistic.Get;
 
 /// <inheritdoc />
 /// <summary>
-/// Эндпоинт для получения статистики
+///     Эндпоинт для получения статистики
 /// </summary>
-/// <param name="mediator"></param>
+/// <param name="mediator"> </param>
 public class GetAdvertisementEndpoint(IMediator mediator):Endpoint<GetStatisticRequest, SummaryStatisticsDto>
 {
     public override void Configure()

@@ -7,7 +7,7 @@ namespace A3TelegramBot.Application.Services.UserState;
 
 /// <inheritdoc />
 /// <summary>
-/// Базовый класс обработчик состояния пользовательской сессии
+///     Базовый класс обработчик состояния пользовательской сессии
 /// </summary>
 internal abstract class BaseStateHandler(
     ITelegramResponseService telegramResponseService,
@@ -15,8 +15,8 @@ internal abstract class BaseStateHandler(
     IUserSessionStateMachine userSessionStateMachine)
     :IStateHandler
 {
-    private protected readonly ITelegramResponseService TelegramResponseService = telegramResponseService;
     private protected readonly IMediator Mediator = mediator;
+    private protected readonly ITelegramResponseService TelegramResponseService = telegramResponseService;
     private protected readonly IUserSessionStateMachine UserSessionStateMachine = userSessionStateMachine;
 
     public virtual Task EnterStateAsync(long chatId, CancellationToken cancellationToken) => Task.CompletedTask;

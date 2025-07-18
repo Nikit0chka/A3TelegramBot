@@ -34,7 +34,7 @@ internal sealed class UserSessionStateMachine(
         var session = await GetOrCreateSessionAsync(chatId, ct);
         await GetHandler(session).HandleTextCommandAsync(chatId, command, ct);
     }
-  
+
     public async Task TransitionToStateAsync(
         long chatId,
         UserSessionState newState,

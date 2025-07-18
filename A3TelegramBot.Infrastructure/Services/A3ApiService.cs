@@ -1,6 +1,3 @@
-// Infrastructure/Services/A3ApiService.cs
-
-using System.Text.Json;
 using A3TelegramBot.Application.Contracts;
 using A3TelegramBot.Application.Dto;
 using A3TelegramBot.Infrastructure.Abstractions;
@@ -11,9 +8,9 @@ using Refit;
 
 public sealed class A3ApiService:IA3ApiService
 {
+    private readonly string _apiToken;
     private readonly IA3ApiClient _client;
     private readonly ILogger<IA3ApiService> _logger;
-    private readonly string _apiToken;
 
     public A3ApiService(IA3ApiClient client, IConfiguration config, ILogger<IA3ApiService> logger)
     {

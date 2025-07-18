@@ -12,9 +12,9 @@ public sealed class ServiceCheckRequestRecord:BaseStatisticRecord, IAggregateRoo
 
     /// <inheritdoc />
     /// <summary>
-    /// Конструктор для EF Core
+    ///     Конструктор для EF Core
     /// </summary>
-    private ServiceCheckRequestRecord():base() { }
+    private ServiceCheckRequestRecord() { }
 
     /// <inheritdoc />
     /// <summary>

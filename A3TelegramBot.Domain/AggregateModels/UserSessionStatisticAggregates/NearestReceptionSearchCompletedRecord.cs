@@ -11,9 +11,9 @@ public sealed class NearestReceptionSearchCompletedRecord:BaseStatisticRecord, I
 {
     /// <inheritdoc />
     /// <summary>
-    /// Конструктор для EF Core
+    ///     Конструктор для EF Core
     /// </summary>
-    private NearestReceptionSearchCompletedRecord():base() { }
+    private NearestReceptionSearchCompletedRecord() { }
 
     public NearestReceptionSearchCompletedRecord(int userId):base(userId) { }
 }

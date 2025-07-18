@@ -29,9 +29,7 @@ internal sealed class GetNearestReceptionStateHandler(
                                                              cancellationToken);
 
         if (!startResult.IsError)
-        {
             await TelegramResponseService.SendRequestLocationAsync(chatId, cancellationToken);
-        }
     }
 
     public override async Task HandleTextCommandAsync(long chatId, TelegramBotCommand? command, CancellationToken cancellationToken)

@@ -11,9 +11,9 @@ public sealed class PriceCheckRequestRecord:BaseStatisticRecord, IAggregateRoot
 {
     /// <inheritdoc />
     /// <summary>
-    /// Конструктор для EF Core
+    ///     Конструктор для EF Core
     /// </summary>
-    private PriceCheckRequestRecord():base() { }
+    private PriceCheckRequestRecord() { }
 
     public PriceCheckRequestRecord(int userId):base(userId) { }
 }

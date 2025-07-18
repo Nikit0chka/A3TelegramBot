@@ -4,7 +4,7 @@ using Refit;
 namespace A3TelegramBot.Infrastructure.Abstractions;
 
 /// <summary>
-/// Http клиент для запросов к А3
+///     Http клиент для запросов к А3
 /// </summary>
 public interface IA3ApiClient
 {
