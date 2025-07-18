@@ -1,5 +1,6 @@
-using A3TelegramBot.Domain.AggregateModels.UserSessionStatisticsAggregate;
-using A3TelegramBot.Domain.AggregateModels.UserSessionStatisticsAggregate.Specifications;
+using A3TelegramBot.Domain.AggregateModels.UserSessionAggregate.UserSession;
+using A3TelegramBot.Domain.AggregateModels.UserSessionAggregate.UserSession.Specifications;
+using A3TelegramBot.Domain.AggregateModels.UserSessionStatisticAggregates;
 using Ardalis.SharedKernel;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -11,7 +12,8 @@ namespace A3TelegramBot.Application.UseCases.UserSessionStatistic.ServicesCheckR
 ///     Обработчик команды сохранение статистики запроса услуг
 /// </summary>
 internal sealed class ServicesCheckRequestCommandHandler(
-    IRepository<UserSessionStatistics> userSessionStatisticsRepository,
+    IRepository<ServiceCheckRequestRecord> serviceCheckRequestRecordRepository,
+    IReadRepository<UserSession> userSessionRepository,
     ILogger<ServicesCheckRequestCommandHandler> logger)
     :ICommandHandler<ServicesCheckRequestCommand, Unit>
 {
@@ -21,17 +23,18 @@ internal sealed class ServicesCheckRequestCommandHandler(
     {
         logger.LogInformation("Обработка команды {command}", nameof(ServicesCheckRequestCommand));
 
-        var userSessionStatistics = await userSessionStatisticsRepository.FirstOrDefaultAsync(new TheOnlyOneUserSessionStatisticsSpecification(), cancellationToken);
+        var userSession = await userSessionRepository.SingleOrDefaultAsync(new UserSessionByChatIdSpecification(request.ChatId), cancellationToken);
 
-        if (userSessionStatistics == null)
+        //TODO:Возможно с этим нужно что-то сделать
+        if (userSession is null)
         {
-            logger.LogCritical("Пользовательская статистика не найдена");
+            logger.LogCritical("Сессия по ChatId: {ChatId} не найдена. Статистика не обновлена", request.ChatId);
             return Unit.Value;
         }
 
-        userSessionStatistics.RecordServicesRequest();
+        var serviceCheckRequestRecord = new ServiceCheckRequestRecord(userSession.Id);
 
-        await userSessionStatisticsRepository.UpdateAsync(userSessionStatistics, cancellationToken);
+        await serviceCheckRequestRecordRepository.AddAsync(serviceCheckRequestRecord, cancellationToken);
 
         logger.LogInformation("Завершена обработка команды {Command}, статистика обновлена",
                               nameof(ServicesCheckRequestCommand));

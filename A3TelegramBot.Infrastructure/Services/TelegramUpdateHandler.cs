@@ -9,8 +9,8 @@ namespace A3TelegramBot.Infrastructure.Services;
 
 /// <inheritdoc />
 /// <summary>
-/// Обработчик обновлений телеграм бота.
-/// Маршрутизирует сообщения в application слой
+///     Обработчик обновлений телеграм бота.
+///     Маршрутизирует сообщения в application слой
 /// </summary>
 internal sealed class TelegramUpdateHandler(
     ITelegramProcessor telegramProcessor,

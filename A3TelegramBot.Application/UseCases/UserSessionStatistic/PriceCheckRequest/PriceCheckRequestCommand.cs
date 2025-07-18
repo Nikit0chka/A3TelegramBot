@@ -7,4 +7,4 @@ namespace A3TelegramBot.Application.UseCases.UserSessionStatistic.PriceCheckRequ
 /// <summary>
 ///     Команда сохранение статистики запроса цен
 /// </summary>
-internal readonly record struct PriceCheckRequestCommand:ICommand<Unit>;
+internal readonly record struct PriceCheckRequestCommand(long ChatId):ICommand<Unit>;

@@ -17,7 +17,12 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Services\UserStateHandlers\CallBackRequestState\CallBackRequestStateHandlers\" />
+      <Compile Remove="Services\StateHandlerFactory.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="Services\UserStateHandlers\IdleStateHandler.cs" />
+      <Compile Remove="Services\UserSessionStateMachine.cs" />
     </ItemGroup>
 
 </Project>

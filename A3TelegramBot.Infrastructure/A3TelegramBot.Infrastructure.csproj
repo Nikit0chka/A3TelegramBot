@@ -7,8 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="ErrorOr" />
         <PackageReference Include="Microsoft.EntityFrameworkCore"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer"/>
+        <PackageReference Include="Refit" />
+        <PackageReference Include="Refit.HttpClientFactory" />
     </ItemGroup>
 
     <ItemGroup>
@@ -17,10 +20,10 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="Config\appsettings.infrastructure.json" />
-      <Content Include="Config\appsettings.infrastructure.json">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
+        <None Remove="Config\appsettings.infrastructure.json"/>
+        <Content Include="Config\appsettings.infrastructure.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
 
 </Project>

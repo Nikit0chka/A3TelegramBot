@@ -1,7 +1,7 @@
-﻿using A3TelegramBot.Domain.AggregateModels.UserSessionAggregate.UserSessionEntity.ValueObjects.PhoneNumberValueObject;
-using A3TelegramBot.Domain.Extensions;
+﻿using A3TelegramBot.Domain.Extensions;
 using Ardalis.GuardClauses;
 using ErrorOr;
+using PhoneNumber = A3TelegramBot.Domain.AggregateModels.UserSessionAggregate.CallBackRequestEntity.ValueObjects.PhoneNumberValueObject.PhoneNumber;
 
 namespace A3TelegramBot.Domain.AggregateModels.UserSessionAggregate.CallBackRequestEntity;
 
@@ -36,7 +36,7 @@ public sealed class CallBackRequest
     }
 
     /// <summary>
-    /// Идентификатор
+    ///     Идентификатор
     /// </summary>
     public int Id { get; private init; }
 

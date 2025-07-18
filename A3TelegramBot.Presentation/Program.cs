@@ -1,6 +1,8 @@
 using A3TelegramBot.Application.Extensions;
 using A3TelegramBot.Infrastructure.Extensions;
 using A3TelegramBot.Presentation.Extensions;
+using FastEndpoints;
+using FastEndpoints.Swagger;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,5 +28,11 @@ builder.Services.AddInfrastructureServices(builder.Configuration, logger);
 builder.Services.AddApplicationServices(logger);
 
 var app = builder.Build();
+
+app
+    .UseAuthentication()
+    .UseAuthorization()
+    .UseFastEndpoints()
+    .UseSwaggerGen();
 
 app.Run();

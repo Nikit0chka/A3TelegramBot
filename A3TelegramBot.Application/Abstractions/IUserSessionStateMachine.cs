@@ -1,5 +1,5 @@
 using A3TelegramBot.Application.Commands;
-using A3TelegramBot.Domain.AggregateModels.UserSessionAggregate.UserSessionEntity;
+using A3TelegramBot.Domain.AggregateModels.UserSessionAggregate.UserSession;
 
 namespace A3TelegramBot.Application.Abstractions;
 
@@ -15,7 +15,7 @@ internal interface IUserSessionStateMachine
     /// <param name="chatId"> Id чата телеграм бота </param>
     /// <param name="newState"> Целевое состояние сессии </param>
     /// <param name="command"> Команда, для вызова в новом обработчике состояния </param>
-    /// <param name="cancellationToken">Токен отмены для асинхронной операции </param>
+    /// <param name="cancellationToken"> Токен отмены для асинхронной операции </param>
     Task TransitionToStateAsync(long chatId, UserSessionState newState, TelegramBotCommand? command, CancellationToken cancellationToken);
 
     /// <summary>

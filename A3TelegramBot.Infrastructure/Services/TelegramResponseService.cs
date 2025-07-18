@@ -101,7 +101,6 @@ internal sealed class TelegramResponseService(
 
     public Task SendUnhandledExceptionOccured(long chatId, CancellationToken cancellationToken) => telegramBotClient.SendMessage(
                                                                                                                                  chatId,
-                                                                                                                                 messageTextProvider.GetFindNearestReceptionsCancelledText(),
-                                                                                                                                 replyMarkup: keyboardFactory.CreateMainMenuKeyboard(),
+                                                                                                                                 messageTextProvider.GetUnhandledExceptionOccuredText(),
                                                                                                                                  cancellationToken: cancellationToken);
 }

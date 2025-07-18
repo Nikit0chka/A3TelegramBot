@@ -1,8 +1,10 @@
 ﻿using System.Reflection;
 using A3TelegramBot.Application.Abstractions;
 using A3TelegramBot.Application.Services;
-using A3TelegramBot.Application.Services.UserStateHandlers;
-using A3TelegramBot.Application.Services.UserStateHandlers.CallBackRequestState;
+using A3TelegramBot.Application.Services.UserState;
+using A3TelegramBot.Application.Services.UserState.CallBackRequestState;
+using A3TelegramBot.Application.Services.UserState.CallBackRequestState.CommandStrategies;
+using A3TelegramBot.Application.Services.UserState.CallBackRequestState.StateHandlers;
 using Ardalis.SharedKernel;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -26,12 +28,23 @@ public static class ServiceCollectionsExtensions
         serviceCollection.AddMediatR(static cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()))
             .AddScoped<IDomainEventDispatcher, MediatRDomainEventDispatcher>();
 
-        serviceCollection.AddScoped<IUserSessionStateMachine, UserSessionStateMachine>();
-        serviceCollection.AddScoped<ITelegramProcessor, TelegramProcessor>();
-        serviceCollection.AddScoped<IStateHandlerFactory, StateHandlerFactory>();
         serviceCollection.AddScoped<ITelegramProcessor, TelegramProcessor>();
 
-        serviceCollection.AddScoped<CallBackRequestStateHandler>();
+
+        // Регистрация обработчиков состояний
+        serviceCollection.AddScoped<ICallbackStateHandler, AwaitingPhoneCallBackStateHandler>();
+        serviceCollection.AddScoped<ICallbackStateHandler, AwaitingNameCallBackStateHandler>();
+        serviceCollection.AddScoped<ICallbackStateHandler, AwaitingPolicyCallBackStateHandler>();
+
+        serviceCollection.AddScoped<IUserSessionStateMachine, UserSessionStateMachine>();
+        serviceCollection.AddScoped<IStateHandlerFactory, StateHandlerFactory>();
+        serviceCollection.AddScoped<CallBackRequestStateMachine>();
+
+        // Регистрация стратегий команд
+        serviceCollection.AddScoped<ICallbackCommandStrategy, CancelCallBackRequestCommandStrategy>();
+        serviceCollection.AddScoped<ICallbackCommandStrategy, YesCommandStrategy>();
+        serviceCollection.AddScoped<ICallbackCommandStrategy, StartCallBackRequestCommandStrategy>();
+
         serviceCollection.AddScoped<GetNearestReceptionStateHandler>();
         serviceCollection.AddScoped<IdleStateHandler>();
 

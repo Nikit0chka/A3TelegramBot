@@ -1,4 +1,4 @@
-﻿using A3TelegramBot.Domain.AggregateModels.UserSessionAggregate.UserSessionEntity;
+﻿using A3TelegramBot.Domain.AggregateModels.UserSessionAggregate.UserSession;
 
 namespace A3TelegramBot.Application.Abstractions;
 

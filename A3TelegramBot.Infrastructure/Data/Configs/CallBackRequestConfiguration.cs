@@ -1,5 +1,5 @@
 using A3TelegramBot.Domain.AggregateModels.UserSessionAggregate.CallBackRequestEntity;
-using A3TelegramBot.Domain.AggregateModels.UserSessionAggregate.UserSessionEntity.ValueObjects.PhoneNumberValueObject;
+using A3TelegramBot.Domain.AggregateModels.UserSessionAggregate.CallBackRequestEntity.ValueObjects.PhoneNumberValueObject;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

@@ -1,4 +1,5 @@
 ﻿using A3TelegramBot.Application.Contracts;
+using A3TelegramBot.Infrastructure.Abstractions;
 using A3TelegramBot.Infrastructure.Data;
 using A3TelegramBot.Infrastructure.Services;
 using A3TelegramBot.Infrastructure.Services.MessageText;
@@ -8,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Refit;
 using Telegram.Bot.Polling;
 
 namespace A3TelegramBot.Infrastructure.Extensions;
@@ -46,6 +48,20 @@ public static class ServiceCollectionExtensions
         serviceCollection.AddScoped<IUpdateHandler, TelegramUpdateHandler>();
 
         serviceCollection.AddSingleton<ITelegramCommandConfigurator, TelegramCommandConfigurator>();
+
+        AddApiClients(serviceCollection, configurationManager);
         logger.LogInformation("Infrastructure сервисы добавлены");
+    }
+
+    private static void AddApiClients(this IServiceCollection serviceCollection, IConfigurationManager configurationManager)
+    {
+        serviceCollection.AddRefitClient<IA3ApiClient>()
+            .ConfigureHttpClient(c =>
+            {
+                c.BaseAddress = new(configurationManager["Api:BaseUrl"]);
+                c.DefaultRequestHeaders.Add("API-Key", configurationManager["Api:Key"]);
+            });
+
+        serviceCollection.AddScoped<IA3ApiService, A3ApiService>();
     }
 }

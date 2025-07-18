@@ -1,6 +1,6 @@
 ﻿using A3TelegramBot.Domain.AggregateModels.UserSessionAggregate.CallBackRequestEntity;
-using A3TelegramBot.Domain.AggregateModels.UserSessionAggregate.Specifications;
-using A3TelegramBot.Domain.AggregateModels.UserSessionAggregate.UserSessionEntity;
+using A3TelegramBot.Domain.AggregateModels.UserSessionAggregate.UserSession;
+using A3TelegramBot.Domain.AggregateModels.UserSessionAggregate.UserSession.Specifications;
 using Ardalis.SharedKernel;
 using ErrorOr;
 using Microsoft.Extensions.Logging;

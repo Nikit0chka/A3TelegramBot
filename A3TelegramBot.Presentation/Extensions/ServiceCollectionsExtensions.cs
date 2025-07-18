@@ -1,5 +1,12 @@
-﻿using A3TelegramBot.Presentation.Services;
+﻿using System.Reflection;
+using A3TelegramBot.Presentation.BackgroundServices;
+using A3TelegramBot.Presentation.Security.Authorization.ApiKey;
 using Ardalis.GuardClauses;
+using FastEndpoints;
+using FastEndpoints.Swagger;
+using FluentValidation;
+using Microsoft.AspNetCore.Authentication;
+using NSwag;
 using Telegram.Bot;
 
 namespace A3TelegramBot.Presentation.Extensions;
@@ -24,6 +31,30 @@ internal static class ServiceCollectionsExtensions
         serviceCollection.AddSingleton<ITelegramBotClient>(_ => new TelegramBotClient(Guard.Against.NullOrEmpty(telegramBotToken, nameof(telegramBotToken), "Telegram bot token was null ro empty")));
         serviceCollection.AddHostedService<BotBackgroundService>();
 
+        serviceCollection.Configure<ApiKeyAuthOptions>(configurationManager.GetSection(ApiKeyAuthOptions.SectionName));
+
+        serviceCollection.AddFastEndpoints()
+            .AddAuthorization()
+            .AddAuthentication(ApikeyAuthorization.SchemeName)
+            .AddScheme<AuthenticationSchemeOptions, ApikeyAuthorization>(ApikeyAuthorization.SchemeName, null);
+
+        serviceCollection.SwaggerDocument(static documentOptions =>
+        {
+            documentOptions.EnableJWTBearerAuth = false;
+
+            documentOptions.DocumentSettings = static settings =>
+            {
+                settings.AddAuth(ApikeyAuthorization.SchemeName,
+                                 new()
+                                 {
+                                     Name = ApikeyAuthorization.HeaderName,
+                                     In = OpenApiSecurityApiKeyLocation.Header,
+                                     Type = OpenApiSecuritySchemeType.ApiKey
+                                 });
+            };
+        });
+
+        serviceCollection.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         serviceCollection.AddOpenApi();
 
         logger.LogInformation("Presentation сервисы добавлены");
